@@ -19,7 +19,7 @@ const ManageImages = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/admin/images`)
+      .get(`${process.env.REACT_APP_POSTGRES_HOST}/admin/images`)
       .then((res) => {
         console.log(res);
         setImagesList(res.data || []);
@@ -31,7 +31,7 @@ const ManageImages = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8080/api/image/${id}`);
+      await axios.delete(`${process.env.REACT_APP_POSTGRES_HOST}/image/${id}`);
     } catch (err) {
       console.error('Failed to delete image:', err);
     }
@@ -46,7 +46,7 @@ const ManageImages = () => {
     Promise.all(
       imagesList?.unlinked?.map((data) =>
         axios
-          .get(`http://localhost:8080/api/image/${data.id}`, {
+          .get(`${process.env.REACT_APP_POSTGRES_HOST}/image/${data.id}`, {
             responseType: 'blob',
           })
           .then((res) => ({

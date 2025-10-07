@@ -31,19 +31,19 @@ export default function EditProduct() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/product/${id}`)
+      .get(`${process.env.REACT_APP_POSTGRES_HOST}/product/${id}`)
       .then((res) => {
         setProduct(res.data.data || {});
         if (res.data.data.displayImageId) {
           setPreview(
-            `http://localhost:8080/api/image/${res.data.data.displayImageId}`
+            `${process.env.REACT_APP_POSTGRES_HOST}/image/${res.data.data.displayImageId}`
           );
         }
       })
       .catch((error) => console.log({ error }));
 
     axios
-      .get('http://localhost:8080/api/categories')
+      .get(`${process.env.REACT_APP_POSTGRES_HOST}/categories`)
       .then((res) => {
         setCategories(res.data);
       })
@@ -58,14 +58,19 @@ export default function EditProduct() {
     setUploading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/image/upload', {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_POSTGRES_HOST}/upload`,
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
 
       const data = await response.json();
       setProduct({ ...product, displayImageId: data.imageId });
-      setPreview(`http://localhost:8080/api/image/${data.imageId}`);
+      setPreview(
+        `${process.env.REACT_APP_POSTGRES_HOST}/image/${data.imageId}`
+      );
     } catch (err) {
       console.error('Image upload failed:', err);
     } finally {
@@ -77,7 +82,7 @@ export default function EditProduct() {
     formData.append('image', file);
     try {
       const response = await axios.post(
-        'http://localhost:8080/api/image/upload',
+        `${process.env.REACT_APP_POSTGRES_HOST}/upload`,
         formData,
         {
           headers: {
@@ -94,7 +99,7 @@ export default function EditProduct() {
   };
 
   const handleSave = () => {
-    fetch(`http://localhost:8080/api/product/${id}`, {
+    fetch(`${process.env.REACT_APP_POSTGRES_HOST}/product/${id}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(product),
@@ -103,7 +108,9 @@ export default function EditProduct() {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8080/api/product/${id}`);
+      await axios.delete(
+        `${process.env.REACT_APP_POSTGRES_HOST}/product/${id}`
+      );
       navigate('/products');
     } catch (err) {
       console.error(err);
@@ -223,7 +230,7 @@ export default function EditProduct() {
               {product.imageIds?.[index] && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <img
-                    src={`http://localhost:8080/api/image/${product.imageIds[index]}`}
+                    src={`${process.env.REACT_APP_POSTGRES_HOST}/image/${product.imageIds[index]}`}
                     alt={`Detail ${index + 1}`}
                     style={{
                       width: 80,

@@ -28,7 +28,7 @@ export default function ProductList() {
   // }, []);
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/product`)
+      .get(`${process.env.REACT_APP_POSTGRES_HOST}/product`)
       .then((res) => {
         console.log(res);
         setProducts(res.data.data || []);

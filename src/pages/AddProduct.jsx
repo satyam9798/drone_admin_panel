@@ -37,8 +37,9 @@ export default function AddProduct() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.POSTGRES_HOST}/categories`)
-      .then((res) => setCategories(res.data));
+      .get(`${process.env.REACT_APP_POSTGRES_HOST}/categories`)
+      .then((res) => setCategories(res.data))
+      .catch((err) => console.error(err));
   }, []);
 
   const uploadImage = async (file) => {
@@ -53,7 +54,7 @@ export default function AddProduct() {
     // });
 
     const response = await axios.post(
-      'http://localhost:8080/api/image/upload',
+      `${process.env.REACT_APP_POSTGRES_HOST}/upload`,
       formData,
       {
         headers: {
@@ -87,7 +88,7 @@ export default function AddProduct() {
   };
 
   const handleSubmit = async () => {
-    fetch(`http://localhost:8080/api/product`, {
+    fetch(`${process.env.REACT_APP_POSTGRES_HOST}/product`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form),
