@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.tsx
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import React from 'react';
+import Dashboard from './pages/Dashboard';
+import EditProduct from './pages/EditProduct';
+import ProductList from './pages/ProductList';
+import AddProduct from './pages/AddProduct';
+import ManageImages from './pages/ManageImages';
 
-function App() {
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#e69500',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+  },
+});
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Router>
+        <Routes>
+          <Route path='/' element={<Dashboard />} />
+          <Route path='/products' element={<ProductList />} />
+          <Route path='/products/:id' element={<EditProduct />} />
+          <Route path='/add-product' element={<AddProduct />} />
+          <Route path='/manage-images' element={<ManageImages />} />
+          <Route path='*' element={<Navigate to='/' replace />} />
+        </Routes>
+      </Router>
+    </ThemeProvider>
   );
 }
-
-export default App;
